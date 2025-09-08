@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Cheats</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #121212;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            background: #1e1e1e;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            background: #2c2c2c;
+            font-size: 18px;
+        }
+
+        tr:hover {
+            background: #2a2a2a;
+        }
+
+        .copy-btn {
+            background: #4cafef;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #3b9ad6;
+        }
+    </style>
+</head>
+
+<body>
+    <table id="cheatTable">
+        <thead>
+            <tr>
+                <th>Active Codes</th>
+                <th>Rewards</th>
+                <th>Copy</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRgM_UqHxgZYULQN4-96UIZHLZMECO-49QRBn0qpfD7BlE-ZE8m3e7BxeP-_fayKg8hee_5uG-led71/pub?output=csv";
+
+        fetch(sheetURL)
+            .then(response => response.text())
+            .then(data => {
+                const rows = data.split("\n").slice(1); // skip header
+                const tbody = document.querySelector("#cheatTable tbody");
+
+                rows.forEach(row => {
+                    if (row.trim() === "") return;
+                    const cols = row.split(",");
+                    const code = cols[0].trim();
+                    const reward = cols[1].trim();
+
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+            <td>${code}</td>
+            <td>${reward}</td>
+            <td><button class="copy-btn" onclick="copyCode('${code}')">Copy</button></td>
+          `;
+                    tbody.appendChild(tr);
+                });
+            });
+
+        function copyCode(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                alert("Copied: " + code);
+            });
+        }
+    </script>
+</body>
+
+</html>
